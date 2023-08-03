@@ -8,17 +8,12 @@ const userSchema = new Schema(
     lastname: { type: String, required: true },
     email: { type: String, required: true },
     nationality: { type: String, required: true },
-    phone: { type: Schema.Types.ObjectId, ref: "PhoneNumber" },
-
-    // image: {
-    //   type: String,
-    //   default: "media/1690210343852cool-profile.jpeg",
-    // },
-    // bio: { type: String },
-
+    image: {
+      type: String,
+      default: "/",
+    },
     // relations
-    // trips: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
-    // countries: [{ type: Schema.Types.ObjectId, ref: "Country" }],
+    phone: { type: Schema.Types.ObjectId, ref: "PhoneNumber" },
   },
   { timestamps: true }
 );
