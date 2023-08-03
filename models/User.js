@@ -4,8 +4,11 @@ const userSchema = new Schema(
   {
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    firstname: { type: String, required: true },
+    lastname: { type: String, required: true },
     email: { type: String, required: true },
-    phone: { type: Number, required: false },
+    nationality: { type: String, required: true },
+    phone: { type: Schema.Types.ObjectId, ref: "PhoneNumber" },
 
     // image: {
     //   type: String,
