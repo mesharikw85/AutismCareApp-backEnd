@@ -23,6 +23,7 @@ const userSchema = new Schema(
         street: { type: String, required: true },
       },
     ],
+    isStaff: { type: Boolean, default: false },
     // relations
     phone: { type: Schema.Types.ObjectId, ref: "PhoneNumber" },
     child: { type: Schema.Types.ObjectId, ref: "ProfileChild" },
