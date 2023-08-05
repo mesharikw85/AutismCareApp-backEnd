@@ -7,8 +7,12 @@ const UserSchema = new Schema(
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
     email: { type: String, required: true },
-    languagen: { type: String, required: true },
-    image: { type: String, required: true },
+
+    language: { type: String, required: true },
+    image: {
+      type: String,
+      default: "/",
+    },
     addresses: [
       {
         government: { type: String, required: true },
@@ -20,13 +24,14 @@ const UserSchema = new Schema(
         street: { type: String, required: true },
       },
     ],
-    numbers: {
-      type: [Number],
-      required: true,
-    },
+    // relations
+    phone: { type: Schema.Types.ObjectId, ref: "PhoneNumber" },
+
     child: { type: Schema.Types.ObjectId, ref: "ProfileChild" },
   },
   { timestamps: true }
 );
 
+
 module.exports = model("User", UserSchema);
+
