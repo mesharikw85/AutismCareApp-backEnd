@@ -1,18 +1,26 @@
 const { model, Schema } = require("mongoose");
-const tripSchema = new Schema(
+const serviceSchema = new Schema(
   {
-    title: { type: String, required: true },
-    image: { type: String, default: "/" },
-    description: { type: String },
+    title: { type: String, required: true, unique: true },
+    image: { type: String, required: true, default: "/" },
+    description: { type: String, required: true },
     location: {
       type: "Point",
       coordinates: [longitude, latitude],
       required: false,
     },
-    like: { type: Schema.Types.ObjectId, ref: "Like" },
+    email: { type: String, required: true },
+    phonenumber: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "PhoneNumber",
+      },
+    ],
   },
   { timestamps: true }
 );
+
+module.exports = model("Service", serviceSchema);
 
 //or i can do UrlSchema and let location points to it
 //https://www.npmjs.com/package/mongoose-type-url
