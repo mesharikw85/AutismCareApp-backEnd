@@ -2,7 +2,6 @@ const { model, Schema } = require("mongoose");
 const serviceSchema = new Schema(
   {
     servicetitle: { type: String, required: true, unique: true },
-    subservicetitle: { type: String, required: true, unique: true },
     image: { type: String, required: true, default: "/" },
     description: { type: String, required: true },
     location: {
@@ -11,6 +10,8 @@ const serviceSchema = new Schema(
       required: false,
     },
     email: { type: String, required: true },
+    //relations
+    type: { type: Schema.Types.ObjectId, ref: "ServiceType" },
     phonenumber: [
       {
         type: Schema.Types.ObjectId,
