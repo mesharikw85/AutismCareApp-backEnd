@@ -1,5 +1,6 @@
 const Service = require("../../models/Service");
 
+
 // no need to be a Staff - all authenticated users can getAllservices
 exports.getAllServices = async (req, res, next) => {
   try {
@@ -47,6 +48,8 @@ exports.createService = async (req, res, next) => {
       //replace to replace \\ in windows to / as used in nodejs
       req.body.image = req.file.path.replace("\\", "/");
     }
+    if (!req.body.image)
+    return next({ status: 400, message: "no image was uploaded!" });
 
     const newService = await Service.create(req.body);
     await req.user.updateOne({ $push: { services: newService._id } });
