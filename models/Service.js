@@ -11,7 +11,7 @@ const serviceSchema = new Schema(
     },
     email: { type: String, required: true },
     //relations
-    type: { type: Schema.Types.ObjectId, ref: "ServiceType" },
+    servicetype: { type: Schema.Types.ObjectId, ref: "ServiceType" },
     phonenumber: [
       {
         type: Schema.Types.ObjectId,

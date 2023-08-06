@@ -1,4 +1,5 @@
 const ServiceType = require("../../models/ServiceType");
+const Service = require("../../models/Service");
 
 // for the time being and we did not allow authorization -- comment isStaff when testing for Create + Update + delete
 
@@ -30,10 +31,28 @@ exports.createServiceType = async (req, res, next) => {
   }
 };
 
+exports.addServiceToServiceType = async (req, res, next) => {
+  try {
+    const { serviceId } = req.params;
+    const service = await Service.findById(serviceId);
+
+    await ServiceType.findByIdAndUpdate(req.servicetype._id, {
+      $push: { services: service._id },
+    });
+    await Service.findByIdAndUpdate(serviceId, {
+      $push: { servicetype: req.servicetype._id },
+    });
+
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+};
+
 // no need to be a Staff - all authenticated users can get all types of services
 exports.getAllServiceTypes = async (req, res, next) => {
   try {
-    const servicetypes = await ServiceType.find();
+    const servicetypes = await ServiceType.find().populate("services");
     res.status(200).json(servicetypes);
   } catch (error) {
     // res.status(401).json({ message: "Not Found!" });
