@@ -12,7 +12,6 @@ exports.createServiceType = async (req, res, next) => {
       res.status(401).json({
         message:
           " You are not Admin and not authorized to create a service type!",
-        error,
       });
     }
 
@@ -27,7 +26,7 @@ exports.createServiceType = async (req, res, next) => {
     return res.status(201).json(newServiceType);
   } catch (error) {
     // res.status(500).json({message: "Error: can not create a new service type", error});
-    return next(err);
+    return next(error);
   }
 };
 
@@ -45,7 +44,7 @@ exports.addServiceToServiceType = async (req, res, next) => {
 
     res.status(204).end();
   } catch (error) {
-    next(error);
+    return next(error);
   }
 };
 
