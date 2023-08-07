@@ -4,7 +4,7 @@ const Service = require("../../models/Service");
 exports.fetchServiceType = async (serviceTypeId, next) => {
   try {
     const servicetype = await ServiceType.findById(serviceTypeId);
-    return user;
+    return servicetype;
   } catch (error) {
     return next(error);
   }
@@ -49,7 +49,7 @@ exports.addServiceToServiceType = async (req, res, next) => {
   try {
     const { serviceId } = req.params;
     const service = await Service.findById(serviceId);
-
+    console.log("first");
     await ServiceType.findByIdAndUpdate(req.serviceType._id, {
       $push: { services: service._id },
     });
