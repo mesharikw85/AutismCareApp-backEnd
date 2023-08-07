@@ -1,6 +1,15 @@
 const ServiceType = require("../../models/ServiceType");
 const Service = require("../../models/Service");
 
+exports.fetchServiceType = async (serviceTypeId, next) => {
+  try {
+    const servicetype = await ServiceType.findById(serviceTypeId);
+    return user;
+  } catch (error) {
+    return next(error);
+  }
+};
+
 // for the time being and we did not allow authorization -- comment isStaff when testing for Create + Update + delete
 
 // as a staff I can create a Service -- authenticated user can not create a service

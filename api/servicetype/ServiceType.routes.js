@@ -7,6 +7,7 @@ const {
   serviceTypeUpdateById,
   serviceTypeDelete,
   addServiceToServiceType,
+  fetchServiceType,
 } = require("./ServiceType.controllers");
 const router = express.Router();
 const passport = require("passport");

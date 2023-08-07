@@ -5,6 +5,7 @@ const {
   createService,
   serviceUpdateById,
   serviceDelete,
+  fetchService,
 } = require("./Service.controllers");
 
 const router = express.Router();
