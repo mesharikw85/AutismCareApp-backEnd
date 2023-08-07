@@ -1,6 +1,6 @@
 const { model, Schema } = require("mongoose");
 
-const userSchema = new Schema(
+const UserSchema = new Schema(
   {
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -8,7 +8,8 @@ const userSchema = new Schema(
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
     email: { type: String, required: true },
-    language: { type: String, required: true },
+
+    language: { type: String, required: false },
     image: {
       type: String,
       default: "/",
@@ -22,13 +23,13 @@ const userSchema = new Schema(
     ],
     addresses: [
       {
-        government: { type: String, required: true },
-        city: { type: String, required: true },
-        block: { type: String, required: true },
-        street: { type: String, required: true },
-        avenue: { type: String, required: true },
-        house: { type: String, required: true },
-        street: { type: String, required: true },
+        government: { type: String, required: false },
+        city: { type: String, required: false },
+        block: { type: String, required: false },
+        street: { type: String, required: false },
+        avenue: { type: String, required: false },
+        house: { type: String, required: false },
+        street: { type: String, required: false },
       },
     ],
     isStaff: { type: Boolean, default: false },
