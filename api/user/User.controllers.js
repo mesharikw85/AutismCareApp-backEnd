@@ -4,6 +4,15 @@ const generateTpken = require("../../utils/auth/generateToken");
 const passhash = require("../../utils/auth/passhash");
 const hashPaswoord = require("../../utils/auth/passhash");
 
+exports.fetchUser = async (userId, next) => {
+  try {
+    const user = await User.findById(userId);
+    return user;
+  } catch (error) {
+    return next(error);
+  }
+};
+
 //1- signup - register (firstname, lastname,username,password,confirmpassword,email,language)
 
 exports.signup = async (req, res, next) => {

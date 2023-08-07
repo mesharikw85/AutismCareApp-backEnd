@@ -4,8 +4,9 @@ const UserSchema = new Schema(
   {
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    firstname: { type: String, required: false },
-    lastname: { type: String, required: false },
+    confirmpassword: { type: String, required: true },
+    firstname: { type: String, required: true },
+    lastname: { type: String, required: true },
     email: { type: String, required: true },
 
     language: { type: String, required: false },
@@ -13,6 +14,13 @@ const UserSchema = new Schema(
       type: String,
       default: "/",
     },
+    phones: [
+      {
+        tags: ["string"],
+        number: "string",
+        remark: "string",
+      },
+    ],
     addresses: [
       {
         government: { type: String, required: false },
@@ -24,12 +32,37 @@ const UserSchema = new Schema(
         street: { type: String, required: false },
       },
     ],
+    isStaff: { type: Boolean, default: false },
     // relations
-    phone: { type: Schema.Types.ObjectId, ref: "PhoneNumber" },
-
     child: { type: Schema.Types.ObjectId, ref: "ProfileChild" },
   },
   { timestamps: true }
 );
 
-module.exports = model("User", UserSchema);
+module.exports = model("User", userSchema);
+
+// example
+
+// phones :
+// [
+//     {
+//         tags : [ "home" ] ,
+//         number : "514994xxxx" ,
+//     } ,
+//    {
+//       tags : [ "office" , "daytime" ] ,
+//       number : "8199999xxx" ,
+//       remark : "Do not leave message call cell"
+//    }
+//    {
+//       tags : [ "cell" ] ,
+//       number : "...." ,
+//       remark : "If weekend and urgent try boat"
+//    }
+//    {
+//       tags : [ "boat" ] ,
+//       number : "...." ,
+//       remark : "Urgent only"
+//    }
+
+// ]
