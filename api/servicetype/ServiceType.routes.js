@@ -6,7 +6,7 @@ const {
   getServiceTypeDetails,
   serviceTypeUpdateById,
   serviceTypeDelete,
-  // addServiceToServiceType,
+  addServiceToServiceType,
 } = require("./ServiceType.controllers");
 const router = express.Router();
 const passport = require("passport");
@@ -45,5 +45,5 @@ router.delete(
   serviceTypeDelete
 );
 
-// router.post("/:serviceTypeId/:serviceId", addRecipeToCategory);
+router.post("/:serviceTypeId/:serviceId", addServiceToServiceType);
 module.exports = router;

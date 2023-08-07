@@ -41,11 +41,11 @@ exports.addServiceToServiceType = async (req, res, next) => {
     const { serviceId } = req.params;
     const service = await Service.findById(serviceId);
 
-    await ServiceType.findByIdAndUpdate(req.servicetype._id, {
+    await ServiceType.findByIdAndUpdate(req.serviceType._id, {
       $push: { services: service._id },
     });
     await Service.findByIdAndUpdate(serviceId, {
-      $push: { servicetype: req.servicetype._id },
+      $push: { servicetype: req.serviceType._id },
     });
 
     res.status(204).end();
