@@ -1,6 +1,15 @@
 const ServiceType = require("../../models/ServiceType");
 const Service = require("../../models/Service");
 
+exports.fetchServiceType = async (serviceTypeId, next) => {
+  try {
+    const servicetype = await ServiceType.findById(serviceTypeId);
+    return user;
+  } catch (error) {
+    return next(error);
+  }
+};
+
 // for the time being and we did not allow authorization -- comment isStaff when testing for Create + Update + delete
 
 // as a staff I can create a Service -- authenticated user can not create a service
@@ -41,11 +50,11 @@ exports.addServiceToServiceType = async (req, res, next) => {
     const { serviceId } = req.params;
     const service = await Service.findById(serviceId);
 
-    await ServiceType.findByIdAndUpdate(req.servicetype._id, {
+    await ServiceType.findByIdAndUpdate(req.serviceType._id, {
       $push: { services: service._id },
     });
     await Service.findByIdAndUpdate(serviceId, {
-      $push: { servicetype: req.servicetype._id },
+      $push: { servicetype: req.serviceType._id },
     });
 
     res.status(204).end();

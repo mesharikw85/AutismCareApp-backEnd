@@ -1,5 +1,14 @@
 const Service = require("../../models/Service");
 
+exports.fetchService = async (serviceId, next) => {
+  try {
+    const servicetype = await Service.findById(serviceId);
+    return user;
+  } catch (error) {
+    return next(error);
+  }
+};
+
 // no need to be a Staff - all authenticated users can getAllservices
 exports.getAllServices = async (req, res, next) => {
   try {
