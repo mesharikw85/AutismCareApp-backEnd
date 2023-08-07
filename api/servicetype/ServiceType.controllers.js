@@ -7,13 +7,13 @@ const Service = require("../../models/Service");
 
 exports.createServiceType = async (req, res, next) => {
   try {
-    // need jwt passport to proceed
-    if (!req.user.isStaff) {
-      res.status(401).json({
-        message:
-          " You are not Admin and not authorized to create a service type!",
-      });
-    }
+    // // need jwt passport to proceed
+    // if (!req.user.isStaff) {
+    //   res.status(401).json({
+    //     message:
+    //       " You are not Admin and not authorized to create a service type!",
+    //   });
+    // }
 
     // image file
     if (req.file) {
@@ -21,6 +21,12 @@ exports.createServiceType = async (req, res, next) => {
       req.body.image = req.file.path.replace("\\", "/");
     }
 
+    const serviceTypeExist = await ServiceType.findOne({
+      category: req.body.category,
+    });
+    if (serviceTypeExist) {
+      return res.status(400).json({ messge: "Service Type alredy exists!" });
+    }
     const newServiceType = await ServiceType.create(req.body);
     await req.user.updateOne({ $push: { servicetypes: newServiceType._id } });
     return res.status(201).json(newServiceType);
@@ -62,9 +68,9 @@ exports.getAllServiceTypes = async (req, res, next) => {
 // an authenticated user can view  service Type details (title - image - description) - no need to be staff
 
 exports.getServiceTypeDetails = async (req, res, next) => {
-  const { serviceTypeID } = req.params;
+  const { serviceTypeId } = req.params;
   try {
-    const foundServiceType = await Service.findById(serviceTypeID);
+    const foundServiceType = await ServiceType.findById(serviceTypeId);
     if (!foundServiceType) {
       res.status(404).json({ message: "This Type of Service is not found!" });
     } else {
@@ -79,8 +85,9 @@ exports.getServiceTypeDetails = async (req, res, next) => {
 
 exports.serviceTypeUpdateById = async (req, res, next) => {
   try {
+    const { serviceTypeId } = req.params;
     if (req.file) {
-      req.body.image = req.file.path.replace("\\", "/");
+      req.body.image = `$(req.file.path)`;
     }
     await ServiceType.findByIdAndUpdate(req.servicetype.id, req.body);
     return res.status(204).end();

@@ -50,12 +50,21 @@ exports.createService = async (req, res, next) => {
     if (!req.body.image)
       return next({ status: 400, message: "no image was uploaded!" });
 
+    const serviceExist = await Service.findOne({
+      servicetitle: req.body.servicetitle,
+    });
+    if (serviceExist) {
+      return res.status(400).json({
+        messge: "The service you are trying to create is already exist!",
+      });
+    }
+
     const newService = await Service.create(req.body);
     await req.user.updateOne({ $push: { services: newService._id } });
     return res.status(201).json(newService);
   } catch (error) {
     // res.status(500).json({message: "Error: can not create a new service", error});
-    return next(err);
+    return next(error);
   }
 };
 
@@ -75,20 +84,20 @@ exports.serviceUpdateById = async (req, res, next) => {
 
 // as astaff: I can delete a service by Id - an authenticated user can not delete a service
 exports.serviceDelete = async (req, res, next) => {
-  const { serviceId } = req.params;
   try {
-    if (!req.user.isStaff) {
-      res.status(401).json({
-        message: "You are not Admin and not authorized to delete a service",
-        error,
-      });
-    }
+    const { serviceId } = req.params;
+    // if (!req.user.isStaff) {
+    //   res.status(401).json({
+    //     message: "You are not Admin and not authorized to delete a service",
+    //     error,
+    //   });
+    // }
     const foundService = await Service.findByIdAndDelete(serviceId);
 
     if (!foundService) {
       return res.status(404).json({ message: "Service is not found!" });
     } else {
-      return res.status(204).end();
+      return res.status(204).json({ message: "Service is deleted!" });
     }
   } catch (error) {
     return next(error);

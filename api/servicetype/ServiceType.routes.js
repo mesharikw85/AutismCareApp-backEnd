@@ -15,10 +15,10 @@ const uploader = require("../../middlewares/uploader");
 
 router.param("serviceTypeId", async (req, res, next, serviceTypeId) => {
   try {
-    const foundServiceType = await fetchService(serviceTypeId);
+    const foundServiceType = await fetchServiceType(serviceTypeId);
     if (!foundServiceType)
       return next({ status: 404, message: "Service Type not found!" });
-    req.service = foundServiceType;
+    req.serviceType = foundServiceType;
     next();
   } catch (error) {
     return next(error);
