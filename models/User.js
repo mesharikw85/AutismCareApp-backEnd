@@ -4,16 +4,13 @@ const UserSchema = new Schema(
   {
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    confirmpassword: { type: String, required: true },
-    firstname: { type: String, required: true },
-    lastname: { type: String, required: true },
-    email: { type: String, required: true },
+    confirmpassword: { type: String, required: false },
+    firstname: { type: String, required: false },
+    lastname: { type: String, required: false },
+    email: { type: String, required: false },
 
     language: { type: String, required: false },
-    image: {
-      type: String,
-      default: "/",
-    },
+    image: { type: String, required: false },
     phones: [
       {
         tags: ["string"],
@@ -39,7 +36,7 @@ const UserSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = model("User", userSchema);
+module.exports = model("User", UserSchema);
 
 // example
 
