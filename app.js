@@ -26,7 +26,7 @@ const app = express();
 //middlewares:
 app.use(cors());
 app.use(express.json());
-// app.use("/media", express.static(path.join(__dirname, "media")));
+app.use("/media", express.static(path.join(__dirname, "media")));
 app.use(morgan("dev"));
 
 //passport
@@ -35,7 +35,6 @@ passport.use("local", localStrategy);
 passport.use(jwtStrategy);
 
 //routes
-app.use("/media", express.static(path.join(__dirname, "media")));
 app.use("/user", userRoutes);
 app.use("/servicetype", serviceTypeRoutes);
 app.use("/service", serviceRoutes);

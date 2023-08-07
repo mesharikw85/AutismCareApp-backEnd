@@ -39,3 +39,23 @@ exports.signin = async (req, res, next) => {
     return next(err);
   }
 };
+
+exports.getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().select("-__v -password -email");
+    return res.status(200).json(users);
+  } catch (error) {
+    return next({ status: 400, message: error.message });
+  }
+};
+
+exports.getProfile = async (req, res, next) => {
+  try {
+    console.log(req.foundUser);
+    const profile = await User.findById(req.foundUser._id);
+    console.log(profile);
+    return res.status(200).json(profile);
+  } catch (error) {
+    next(error);
+  }
+};
