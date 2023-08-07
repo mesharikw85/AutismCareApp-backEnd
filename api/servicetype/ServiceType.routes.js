@@ -16,13 +16,14 @@ const uploader = require("../../middlewares/uploader");
 
 router.param("serviceTypeId", async (req, res, next, serviceTypeId) => {
   try {
-    const foundServiceType = await fetchServiceType(serviceTypeId);
-    if (!foundServiceType)
+    const foundServiceType = await fetchServiceType(serviceTypeId, next);
+    if (!foundServiceType) {
       return next({ status: 404, message: "Service Type not found!" });
+    }
     req.serviceType = foundServiceType;
     next();
   } catch (error) {
-    return next(error);
+    next(error);
   }
 });
 
@@ -46,5 +47,6 @@ router.delete(
   serviceTypeDelete
 );
 
-router.post("/:serviceTypeId/:serviceId", addServiceToServiceType);
+router.post("/:serviceId/:serviceTypeId", addServiceToServiceType);
+// router.post("/:serviceTypeId/:serviceId", addServiceToServiceType);
 module.exports = router;

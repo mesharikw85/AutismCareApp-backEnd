@@ -7,8 +7,24 @@ const ProfileChildSchema = new Schema(
     birthday: { type: String, required: true },
     doctorname: { type: String, required: true },
     image: { type: String, required: true },
+    addresses: [
+      {
+        government: { type: String, required: true },
+        city: { type: String, required: true },
+        block: { type: String, required: true },
+        street: { type: String, required: true },
+        avenue: { type: String, required: true },
+        house: { type: String, required: true },
+        street: { type: String, required: true },
+      },
+    ],
 
-    numbers: Number,
+    phones: [
+      {
+        number: "string",
+      },
+    ],
+    user: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );
