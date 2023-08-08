@@ -51,10 +51,8 @@ exports.getUsers = async (req, res, next) => {
 
 exports.getProfile = async (req, res, next) => {
   try {
-    console.log(req.foundUser);
-    const profile = await User.findById(req.foundUser._id);
-    console.log(profile);
-    return res.status(200).json(profile);
+    console.log("first");
+    return res.status(200).json(req.user);
   } catch (error) {
     next(error);
   }
