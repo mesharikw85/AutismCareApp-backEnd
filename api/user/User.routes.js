@@ -32,6 +32,10 @@ router.post(
 router.get("/", getUsers);
 
 //getrofile
-router.get("/profile/:userId", getProfile);
+router.get(
+  "/myProfile",
+  passport.authenticate("jwt", { session: false }),
+  getProfile
+);
 
 module.exports = router;
