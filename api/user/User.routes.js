@@ -36,6 +36,7 @@ router.get("/", getUsers);
 router.get(
   "/myProfile",
   passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
   getProfile
 );
 
