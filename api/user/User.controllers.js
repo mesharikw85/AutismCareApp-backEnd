@@ -57,3 +57,16 @@ exports.getProfile = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.updateprofile = async (req, res, next) => {
+  try {
+    const newUser = await User.findByIdAndUpdate(req.user._id, req.body, {
+      new: true,
+    });
+    console.log({ newUser, old: req.user });
+    console.log(req.body);
+    return res.status(204).end();
+  } catch (error) {
+    return next({ status: 400, message: error.message });
+  }
+};

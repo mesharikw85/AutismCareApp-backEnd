@@ -29,7 +29,7 @@ const UserSchema = new Schema(
         street: { type: String, required: false },
       },
     ],
-    isStaff: { type: Boolean, default: false },
+
     // relations
     child: { type: Schema.Types.ObjectId, ref: "ProfileChild" },
   },

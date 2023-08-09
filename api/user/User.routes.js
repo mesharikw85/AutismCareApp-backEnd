@@ -5,6 +5,7 @@ const {
   getProfile,
   getUsers,
   fetchUser,
+  updateprofile,
 } = require("./User.controllers");
 const router = express.Router();
 const passport = require("passport");
@@ -38,4 +39,11 @@ router.get(
   getProfile
 );
 
+router.put(
+  "/profile",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+
+  updateprofile
+);
 module.exports = router;
