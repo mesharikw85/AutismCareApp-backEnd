@@ -60,6 +60,10 @@ exports.getProfile = async (req, res, next) => {
 
 exports.updateprofile = async (req, res, next) => {
   try {
+    if (req.file) {
+      req.body.image = `${req.file.path.replace("\\", "/")}`;
+    }
+
     const newUser = await User.findByIdAndUpdate(req.user._id, req.body, {
       new: true,
     });
