@@ -6,6 +6,9 @@ const {
   getUsers,
   fetchUser,
   updateprofile,
+  createProfileChild,
+  getProfileChild,
+  updateprofileChild,
 } = require("./User.controllers");
 const router = express.Router();
 const passport = require("passport");
@@ -32,7 +35,7 @@ router.post(
 //getuser
 router.get("/", getUsers);
 
-//getrofile
+//getProfile
 router.get(
   "/myProfile",
   passport.authenticate("jwt", { session: false }),
@@ -40,11 +43,32 @@ router.get(
   getProfile
 );
 
+//updateProfile
+
 router.put(
   "/profile",
   passport.authenticate("jwt", { session: false }),
   upload.single("image"),
-
   updateprofile
+);
+
+//creat profile child
+router.post("/addChild", upload.single("image"), createProfileChild);
+
+//getProfileChild
+router.get(
+  "/myProfileChild",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  getProfileChild
+);
+
+//updateProfileChild
+
+router.put(
+  "/profilechild",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  updateprofileChild
 );
 module.exports = router;
