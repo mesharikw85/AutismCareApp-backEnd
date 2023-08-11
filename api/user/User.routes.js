@@ -9,6 +9,7 @@ const {
   createProfileChild,
   getProfileChild,
   updateprofileChild,
+  deleteChildprofile,
 } = require("./User.controllers");
 const router = express.Router();
 const passport = require("passport");
@@ -46,14 +47,19 @@ router.get(
 //updateProfile
 
 router.put(
-  "/profile",
+  "/profile/",
   passport.authenticate("jwt", { session: false }),
   upload.single("image"),
   updateprofile
 );
 
 //creat profile child
-router.post("/addChild", upload.single("image"), createProfileChild);
+router.post(
+  "/addChild",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  createProfileChild
+);
 
 //getProfileChild
 router.get(
@@ -66,9 +72,17 @@ router.get(
 //updateProfileChild
 
 router.put(
-  "/profilechild",
+  "/profilechild/:childId",
   passport.authenticate("jwt", { session: false }),
   upload.single("image"),
   updateprofileChild
 );
+
+//delete
+router.delete(
+  "/myprofilechild/:childId",
+  passport.authenticate("jwt", { session: false }),
+  deleteChildprofile
+);
+
 module.exports = router;
