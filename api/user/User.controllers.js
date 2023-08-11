@@ -3,6 +3,7 @@ const ChildProfile = require("../../models/ProfileChild");
 const generateToken = require("../../utils/auth/generateToken");
 const generateTpken = require("../../utils/auth/generateToken");
 const passhash = require("../../utils/auth/passhash");
+const ProfileChild = require("../../models/ProfileChild");
 
 exports.fetchUser = async (userId, next) => {
   try {
@@ -42,7 +43,9 @@ exports.signin = async (req, res, next) => {
 
 exports.getUsers = async (req, res, next) => {
   try {
-    const users = await User.find().select("-__v -password -email");
+    const users = await User.find()
+      .select("-__v -password -email")
+      .populate("child");
     return res.status(200).json(users);
   } catch (error) {
     return next({ status: 400, message: error.message });
@@ -81,9 +84,19 @@ exports.createProfileChild = async (req, res, next) => {
     if (req.file) {
       req.body.image = `${req.file.path.replace("\\", "/")}`;
     }
-    if (!req.body.image)
-      return next({ status: 400, message: "no image was uploaded!" });
+    // if (!req.body.image)
+    //   return next({ status: 400, message: "no image was uploaded!" });
     const newChild = await ChildProfile.create(req.body);
+    // Associate the child profile with the user
+    await User.findByIdAndUpdate(req.user._id, {
+      $push: { child: newChild._id },
+    });
+
+    // Associate the user with the child profile
+    await ProfileChild.findByIdAndUpdate(newChild._id, {
+      user: req.user._id,
+    });
+
     res.status(201).json(newChild);
   } catch (error) {
     return next({ status: 400, message: error.message });
@@ -94,9 +107,9 @@ exports.createProfileChild = async (req, res, next) => {
 exports.getProfileChild = async (req, res, next) => {
   try {
     // Fetch child profiles using ChildProfile model
-    const childProfiles = await ChildProfile.find().select(
-      "-__v -password -email"
-    );
+    const childProfiles = await ChildProfile.find()
+      .select("-__v -password -email")
+      .populate("user");
 
     // Sending the fetched child profiles as a JSON response
     return res.status(200).json(childProfiles);
@@ -107,30 +120,63 @@ exports.getProfileChild = async (req, res, next) => {
 
 exports.updateprofileChild = async (req, res, next) => {
   try {
-    const updatedData = req.body;
-
+    const { childId } = req.params;
     if (req.file) {
-      updatedData.image = req.file.path.replace("\\", "/");
+      req.body.image = `${req.file.path}`;
     }
-
-    // Find the child profile by ID and update it
-    const updatedChild = await ChildProfile.findByIdAndUpdate(
-      req.user._id, // Assuming req.user._id contains the correct user ID
-      updatedData,
-      {
-        new: true, // Return the updated document
-      }
-    );
-
-    if (!updatedChild) {
-      // If updatedChild is null, the profile was not found
-      return res.status(404).json({ error: "Child profile not found." });
+    const child = await ChildProfile.findById(childId);
+    console.log(child.user.toString());
+    console.log(req.user._id.toString());
+    if (!child) {
+      res.status(404).json({ message: "child not found" });
+    } else {
+      await child.updateOne({
+        firstname: req.body.username,
+        image: req.body.image,
+      });
+      const a = await ChildProfile.findById(child._id);
+      console.log(a);
+      return res.status(200).json({ message: "child is updated" });
     }
-
-    console.log("Updated Child:", updatedChild);
-    return res.status(200).json(updatedChild);
   } catch (error) {
-    console.error("Error updating child profile:", error);
-    return res.status(400).json({ error: "Failed to update child profile." });
+    next(error);
   }
 };
+
+//delete
+
+exports.deleteChildprofile = async (req, res, next) => {
+  try {
+    const { childId } = req.params;
+    const child = await ChildProfile.findById(childId);
+    console.log(child.user.toString());
+    console.log(req.user._id.toString());
+    if (!child) {
+      res.status(404).json({ message: "child not found" });
+    } else {
+      await child.updateOne({
+        firstname: req.body.username,
+        image: req.body.image,
+      });
+      const a = await ChildProfile.findByIdAndRemove(child._id);
+      console.log(a);
+      return res.status(200).json({ message: "child is delete" });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+// exports.deleteUser = async (req, res, next) => {
+//   try {
+//     if (!req.user._id.equals(req.foundUser._id))
+//       return next({
+//         status: 400,
+//         message: "you dont have the permission to preform this task!",
+//       });
+//     await User.findByIdAndRemove({ _id: req.user.id });
+//     return res.status(204).end();
+//   } catch (error) {
+//     return next({ status: 400, message: error.message });
+//   }
+// };

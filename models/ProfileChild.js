@@ -9,7 +9,7 @@ const ProfileChildSchema = new Schema(
     image: { type: String, required: false },
     phones: String,
     addresses: String,
-    user: { type: Schema.Types.ObjectId, ref: "User" },
+    user: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );
