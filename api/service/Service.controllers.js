@@ -3,8 +3,8 @@ const ServiceType = require("../../models/ServiceType");
 
 exports.fetchService = async (serviceId, next) => {
   try {
-    const servicetype = await Service.findById(serviceId);
-    return user;
+    const service = await Service.findById(serviceId);
+    return service;
   } catch (error) {
     return next(error);
   }
