@@ -1,4 +1,5 @@
 const Service = require("../../models/Service");
+const ServiceType = require("../../models/ServiceType");
 
 exports.fetchService = async (serviceId, next) => {
   try {
@@ -23,9 +24,9 @@ exports.getAllServices = async (req, res, next) => {
 // an authenticated user can view service's details (all fields in user model)
 
 exports.getServiceDetails = async (req, res, next) => {
-  const { serviceID } = req.params;
+  const { serviceId } = req.params;
   try {
-    const foundService = await Service.findById(serviceID);
+    const foundService = await Service.findById(serviceId);
     if (!foundService) {
       res.status(404).json({ message: "Service not found!" });
     } else {
@@ -43,13 +44,13 @@ exports.getServiceDetails = async (req, res, next) => {
 
 exports.createService = async (req, res, next) => {
   try {
-    // need jwt passport to proceed
-    if (!req.user.isStaff) {
-      res.status(401).json({
-        message: " You are not Admin and not authorized to create a service!",
-        error,
-      });
-    }
+    // // need jwt passport to proceed
+    // if (!req.user.isStaff) {
+    //   res.status(401).json({
+    //     message: " You are not Admin and not authorized to create a service!",
+    //     error,
+    //   });
+    // }
 
     // image file
     if (req.file) {
@@ -92,21 +93,35 @@ exports.serviceUpdateById = async (req, res, next) => {
 };
 
 // as astaff: I can delete a service by Id - an authenticated user can not delete a service
+
+// as astaff: I can delete a service Type by Id - an authenticated user can not delete it
 exports.serviceDelete = async (req, res, next) => {
   try {
+    const { serviceTypeId } = req.params;
     const { serviceId } = req.params;
-    // if (!req.user.isStaff) {
-    //   res.status(401).json({
-    //     message: "You are not Admin and not authorized to delete a service",
-    //     error,
-    //   });
-    // }
-    const foundService = await Service.findByIdAndDelete(serviceId);
 
-    if (!foundService) {
-      return res.status(404).json({ message: "Service is not found!" });
+    if (req.user) {
+      const serviceType = await ServiceType.findById(serviceTypeId);
+      const service = await Service.findById(serviceId);
+
+      if (serviceType && service) {
+        await service.updateOne({
+          $pop: { service: serviceId },
+        });
+
+        await serviceType.updateOne({
+          $pop: { serviceType: serviceTypeId },
+        });
+        res.status(204).end();
+      } else {
+        res
+          .status(404)
+          .json({ message: "Service Type or Service is not found!" });
+      }
     } else {
-      return res.status(204).json({ message: "Service is deleted!" });
+      res
+        .status(401)
+        .json({ message: "This user is not authorized to Delete" });
     }
   } catch (error) {
     return next(error);

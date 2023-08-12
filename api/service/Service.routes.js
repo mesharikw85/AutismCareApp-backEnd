@@ -27,7 +27,7 @@ router.param("serviceId", async (req, res, next, serviceId) => {
 
 router.get("/", getAllServices);
 
-router.get("/:serviceID", getServiceDetails);
+router.get("/:serviceId", getServiceDetails);
 
 router.post(
   "/",
