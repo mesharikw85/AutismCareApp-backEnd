@@ -8,6 +8,8 @@ const errorHandler = require("./middlewares/errorHandler");
 const serviceRoutes = require("./api/service/service.routes");
 //serviceType
 const serviceTypeRoutes = require("./api/servicetype/ServiceType.routes");
+//organization
+const OrganizationRoutes = require("./api/organization/Organization.routes");
 //user
 const userRoutes = require("./api/user/User.routes");
 const config = require("./config/Keys");
@@ -38,6 +40,7 @@ passport.use(jwtStrategy);
 app.use("/user", userRoutes);
 app.use("/servicetype", serviceTypeRoutes);
 app.use("/service", serviceRoutes);
+app.use("/organization", OrganizationRoutes);
 
 //errorhandlers:
 app.use(notFound);
