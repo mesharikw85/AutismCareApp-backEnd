@@ -96,34 +96,51 @@ exports.serviceTypeUpdateById = async (req, res, next) => {
   try {
     const { serviceTypeId } = req.params;
     if (req.file) {
-      req.body.image = `$(req.file.path)`;
+      req.body.image = `${req.file.path}`;
     }
-    await ServiceType.findByIdAndUpdate(req.servicetype.id, req.body);
-    return res.status(204).end();
+    // await ServiceType.findByIdAndUpdate(req.servicetype.id, req.body);
+    // return res.status(204).end();
+
+    const serviceType = await ServiceType.findById(serviceTypeId);
+    if (!serviceType) {
+      res.status(404).json({ message: "Service Type not found!" });
+    } else {
+      await serviceType.updateOne(req.body);
+      return res.status(200).json({ message: "Service Type is Updated" });
+    }
   } catch (error) {
-    return next(error);
+    next(error);
   }
 };
 
 // as astaff: I can delete a service Type by Id - an authenticated user can not delete it
 exports.serviceTypeDelete = async (req, res, next) => {
-  const { serviceTypeId } = req.params;
   try {
-    if (!req.user.isStaff) {
-      res.status(401).json({
-        message:
-          "You are not Admin and not authorized to delete a service type",
-        error,
-      });
-    }
-    const foundServiceType = await Service.findByIdAndDelete(serviceTypeId);
+    const { serviceTypeId } = req.params;
+    const { serviceId } = req.params;
 
-    if (!foundServiceType) {
-      return res
-        .status(404)
-        .json({ message: "This Service Type is not found!" });
+    if (req.user) {
+      const serviceType = await ServiceType.findById(serviceTypeId);
+      const service = await Service.findById(serviceId);
+
+      if (serviceType && service) {
+        await service.updateOne({
+          $pop: { service: serviceId },
+        });
+
+        await serviceType.updateOne({
+          $pop: { serviceType: serviceTypeId },
+        });
+        res.status(204).end();
+      } else {
+        res
+          .status(404)
+          .json({ message: "Service Type or Service is not found!" });
+      }
     } else {
-      return res.status(204).end();
+      res
+        .status(401)
+        .json({ message: "This user is not authorized to Delete" });
     }
   } catch (error) {
     return next(error);
