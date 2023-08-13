@@ -120,22 +120,23 @@ exports.getProfileChild = async (req, res, next) => {
 
 exports.updateprofileChild = async (req, res, next) => {
   try {
+    console.log(req.body);
     const { childId } = req.params;
     if (req.file) {
       req.body.image = `${req.file.path}`;
     }
     const child = await ChildProfile.findById(childId);
-    console.log(child.user.toString());
-    console.log(req.user._id.toString());
+    // console.log(child.user.toString());
+    // console.log(req.user._id.toString());
     if (!child) {
       res.status(404).json({ message: "child not found" });
     } else {
       await child.updateOne({
-        firstname: req.body.username,
+        ...req.body,
         image: req.body.image,
       });
       const a = await ChildProfile.findById(child._id);
-      console.log(a);
+      // console.log(a);
       return res.status(200).json({ message: "child is updated" });
     }
   } catch (error) {

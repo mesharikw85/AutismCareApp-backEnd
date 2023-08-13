@@ -49,7 +49,7 @@ exports.addServiceToServiceType = async (req, res, next) => {
   try {
     const { serviceId } = req.params;
     const service = await Service.findById(serviceId);
-    console.log("first");
+
     await ServiceType.findByIdAndUpdate(req.serviceType._id, {
       $push: { services: service._id },
     });
@@ -113,36 +113,54 @@ exports.serviceTypeUpdateById = async (req, res, next) => {
   }
 };
 
-// as astaff: I can delete a service Type by Id - an authenticated user can not delete it
-exports.serviceTypeDelete = async (req, res, next) => {
+exports.deleteServiceType = async (req, res, next) => {
   try {
     const { serviceTypeId } = req.params;
-    const { serviceId } = req.params;
 
-    if (req.user) {
-      const serviceType = await ServiceType.findById(serviceTypeId);
-      const service = await Service.findById(serviceId);
+    const serviceType = await ServiceType.findById(serviceTypeId);
 
-      if (serviceType && service) {
-        await service.updateOne({
-          $pop: { service: serviceId },
-        });
-
-        await serviceType.updateOne({
-          $pop: { serviceType: serviceTypeId },
-        });
-        res.status(204).end();
-      } else {
-        res
-          .status(404)
-          .json({ message: "Service Type or Service is not found!" });
-      }
-    } else {
-      res
+    if (serviceType.services.length > 0) {
+      return res
         .status(401)
-        .json({ message: "This user is not authorized to Delete" });
+        .json({ message: "you can't delete this Service Type!" });
     }
+    await serviceType.deleteOne();
+    return res.status(204).end();
   } catch (error) {
-    return next(error);
+    next(error);
   }
 };
+
+// as astaff: I can delete a service Type by Id - an authenticated user can not delete it
+// exports.serviceTypeDelete = async (req, res, next) => {
+//   try {
+//     const { serviceTypeId } = req.params;
+//     const { serviceId } = req.params;
+
+//     if (req.user) {
+//       const serviceType = await ServiceType.findById(serviceTypeId);
+//       const service = await Service.findById(serviceId);
+
+//       if (serviceType && service) {
+//         await service.updateOne({
+//           $pop: { service: serviceId },
+//         });
+
+//         await serviceType.updateOne({
+//           $pop: { serviceType: serviceTypeId },
+//         });
+//         res.status(204).end();
+//       } else {
+//         res
+//           .status(404)
+//           .json({ message: "Service Type or Service is not found!" });
+//       }
+//     } else {
+//       res
+//         .status(401)
+//         .json({ message: "This user is not authorized to Delete" });
+//     }
+//   } catch (error) {
+//     return next(error);
+//   }
+// };
