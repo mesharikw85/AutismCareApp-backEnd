@@ -1,6 +1,6 @@
 const Organization = require("../../models/Organization");
 const ServiceType = require("../../models/ServiceType");
-const Service = require("..//../models/Service");
+const Service = require("../../models/Service");
 
 exports.fetchOrganization = async (organizationId, next) => {
   try {

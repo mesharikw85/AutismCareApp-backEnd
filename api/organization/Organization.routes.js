@@ -1,11 +1,10 @@
 const express = require("express");
 const {
   getAllOrganizations,
-  getOrganizationDetails,
+  // getOrganizationDetails,
   createOrganization,
-
   fetchOrganization,
-} = require("./api/Organization.controllers");
+} = require("./Organization.controllers");
 
 const router = express.Router();
 
@@ -27,7 +26,7 @@ router.param("organizationId", async (req, res, next, organizationId) => {
 
 router.get("/", getAllOrganizations);
 
-router.get("/:organizationId", getOrganizationDetails);
+// router.get("/:organizationId", getOrganizationDetails);
 
 router.post(
   "/",
@@ -35,3 +34,5 @@ router.post(
   uploader.single("image"),
   createOrganization
 );
+
+module.exports = router;
