@@ -100,7 +100,7 @@ exports.serviceTypeUpdateById = async (req, res, next) => {
     }
     // await ServiceType.findByIdAndUpdate(req.servicetype.id, req.body);
     // return res.status(204).end();
-
+    console.log(req.body);
     const serviceType = await ServiceType.findById(serviceTypeId);
     if (!serviceType) {
       res.status(404).json({ message: "Service Type not found!" });

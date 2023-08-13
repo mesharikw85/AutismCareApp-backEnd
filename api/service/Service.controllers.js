@@ -31,7 +31,7 @@ exports.getServiceDetails = async (req, res, next) => {
     if (!foundService) {
       res.status(404).json({ message: "Service not found!" });
     } else {
-      res.status(201).json(foundService).select("-__v");
+      res.status(201).json(foundService);
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
