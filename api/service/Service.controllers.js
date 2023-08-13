@@ -1,3 +1,4 @@
+const Organization = require("../../models/Organization");
 const Service = require("../../models/Service");
 const ServiceType = require("../../models/ServiceType");
 
@@ -99,9 +100,11 @@ exports.serviceDelete = async (req, res, next) => {
   try {
     const { serviceTypeId } = req.params;
     const { serviceId } = req.params;
+    const { organizationId } = req.params;
 
     if (req.user) {
       const serviceType = await ServiceType.findById(serviceTypeId);
+      const organization = await Organization.findById(organizationId);
       const service = await Service.findById(serviceId);
 
       if (serviceType && service) {
@@ -117,6 +120,20 @@ exports.serviceDelete = async (req, res, next) => {
         res
           .status(404)
           .json({ message: "Service Type or Service is not found!" });
+      }
+      if (organization && service) {
+        await service.updateOne({
+          $pop: { service: serviceId },
+        });
+
+        await organization.updateOne({
+          $pop: { organization: organizationId },
+        });
+        res.status(204).end();
+      } else {
+        res
+          .status(404)
+          .json({ message: "Organization or Service is not found!" });
       }
     } else {
       res
