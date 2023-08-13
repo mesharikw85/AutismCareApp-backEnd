@@ -37,4 +37,3 @@ const serviceSchema = new Schema(
 module.exports = model("Service", serviceSchema);
 
 //or i can do UrlSchema and let location points to it
-//https://www.npmjs.com/package/mongoose-type-url

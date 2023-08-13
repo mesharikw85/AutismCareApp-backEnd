@@ -3,6 +3,7 @@ const {
   getAllOrganizations,
   // getOrganizationDetails,
   createOrganization,
+  addServiceToOrganization,
   fetchOrganization,
 } = require("./Organization.controllers");
 
@@ -25,6 +26,7 @@ router.param("organizationId", async (req, res, next, organizationId) => {
 });
 
 router.get("/", getAllOrganizations);
+// router.get("/:serviceTypeId", getServiceTypeDetails);
 
 // router.get("/:organizationId", getOrganizationDetails);
 
@@ -33,6 +35,12 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   uploader.single("image"),
   createOrganization
+);
+
+router.post(
+  "/:serviceId/:organizationId",
+  passport.authenticate("jwt", { session: false }),
+  addServiceToOrganization
 );
 
 module.exports = router;

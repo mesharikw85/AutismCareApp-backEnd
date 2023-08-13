@@ -50,11 +50,11 @@ router.put(
   passport.authenticate("jwt", { session: false }),
   serviceTypeUpdateById
 );
-router.delete(
-  "/:serviceTypeId",
-  passport.authenticate("jwt", { session: false }),
-  serviceTypeDelete
-);
+// router.delete(
+//   "/:serviceTypeId",
+//   passport.authenticate("jwt", { session: false }),
+//   serviceTypeDelete
+// );
 
 router.post(
   "/:serviceId/:serviceTypeId",
