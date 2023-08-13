@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   getAllOrganizations,
-  getOrganizationDetails,
+  // getOrganizationDetails,
   createOrganization,
   addServiceToOrganization,
   fetchOrganization,
@@ -28,7 +28,7 @@ router.param("organizationId", async (req, res, next, organizationId) => {
 router.get("/", getAllOrganizations);
 // router.get("/:serviceTypeId", getServiceTypeDetails);
 
-router.get("/:organizationId", getOrganizationDetails);
+// router.get("/:organizationId", getOrganizationDetails);
 
 router.post(
   "/",
