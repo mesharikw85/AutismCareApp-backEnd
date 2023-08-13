@@ -48,6 +48,7 @@ router.post(
 router.put(
   "/:serviceTypeId",
   passport.authenticate("jwt", { session: false }),
+  uploader.single("image"),
   serviceTypeUpdateById
 );
 // router.delete(
