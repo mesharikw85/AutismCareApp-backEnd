@@ -23,11 +23,11 @@ exports.getAllOrganizations = async (req, res, next) => {
 exports.getOrganizationDetails = async (req, res, next) => {
   const { organizationId } = req.params;
   try {
-    const foundOrganization = await Service.findById(organizationId);
+    const foundOrganization = await Organization.findById(organizationId);
     if (!foundOrganization) {
       res.status(404).json({ message: "Organization not found!" });
     } else {
-      res.status(201).json(foundOrganization).select("-__v");
+      res.status(201).json(foundOrganization);
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -45,7 +45,7 @@ exports.createOrganization = async (req, res, next) => {
       return next({ status: 400, message: "no image was uploaded!" });
 
     const organizationExist = await Organization.findOne({
-      organizationtitle: req.body.organizationtitle,
+      title: req.body.title,
     });
     if (organizationExist) {
       return res.status(400).json({
