@@ -39,6 +39,7 @@ router.post(
 router.put(
   "/",
   passport.authenticate("jwt", { session: false }),
+  uploader.single("image"),
   serviceUpdateById
 );
 
