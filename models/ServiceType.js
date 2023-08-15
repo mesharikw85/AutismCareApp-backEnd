@@ -8,6 +8,9 @@ const serviceTypeSchema = new Schema(
     services: [
       { type: Schema.Types.ObjectId, required: false, ref: "Service" },
     ],
+    organizations: [
+      { type: Schema.Types.ObjectId, required: false, ref: "Organization" },
+    ],
   },
   { timestamps: true }
 );

@@ -79,7 +79,9 @@ exports.getAllServiceTypes = async (req, res, next) => {
 exports.getServiceTypeDetails = async (req, res, next) => {
   const { serviceTypeId } = req.params;
   try {
-    const foundServiceType = await ServiceType.findById(serviceTypeId);
+    const foundServiceType = await ServiceType.findById(serviceTypeId).populate(
+      "services organizations"
+    );
     if (!foundServiceType) {
       res.status(404).json({ message: "This Type of Service is not found!" });
     } else {
